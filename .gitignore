@@ -1,3 +1,23 @@
 # SSL Certificates
 *.crt
 *.key
+
+# Dev environment
+bin
+include
+lib
+lib64
+share
+.Python
+
+.idea
+.coverage
+coverage/
+
+*/pip-selfcheck.json
+
+*.pyc
+*.log
+*.tar
+
+pyvenv.cfg
