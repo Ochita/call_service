@@ -1,4 +1,5 @@
-from aiortc import RTCPeerConnection, RTCSessionDescription, MediaStreamTrack, VideoStreamTrack, AudioStreamTrack
+from aiortc import RTCPeerConnection, RTCSessionDescription
+from aiortc.mediastreams import MediaStreamTrack, AudioStreamTrack, VideoStreamTrack
 import json
 import numpy as np
 from av import VideoFrame, AudioFrame, AudioResampler
@@ -162,7 +163,6 @@ class MuxAudioStreamTrack(MuxStreamTrack):
         frame = None
         for fr in frames:
             if isinstance(fr, AudioFrame):
-                print(fr.samples)
                 # pts = max(pts, fr.pts)
                 frame = fr
                 ar = fr.to_ndarray()
@@ -176,7 +176,6 @@ class MuxAudioStreamTrack(MuxStreamTrack):
         res = res.astype('int16')
         new_frame = AudioFrame.from_ndarray(res, format='s16', layout='mono')
         new_frame.pts = self.pts
-        print(time.time() - self.last_time)
         self.last_time = time.time()
         self.pts += samples
         new_frame.time_base = fractions.Fraction(1, 32000)
@@ -278,7 +277,7 @@ class Connection(object):
         player = MediaPlayer(os.path.join(ROOT, "Space Unicorn.mp3"))
         self.audio.add_track(ReSampledAudioStreamTrack(player.audio))
 
-        # self.pc.addTrack(self.video)
+        self.pc.addTrack(self.video)
         self.pc.addTrack(self.audio)
 
     async def get_answer(self, sdp, type):
